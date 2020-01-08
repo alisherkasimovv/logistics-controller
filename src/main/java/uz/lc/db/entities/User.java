@@ -1,4 +1,6 @@
 package uz.lc.db.entities;
 
-public class User {
+import uz.lc.db.entities.base.UpdateBaseEntity;
+
+public class User extends UpdateBaseEntity {
 }

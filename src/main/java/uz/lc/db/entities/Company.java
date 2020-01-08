@@ -1,4 +1,6 @@
 package uz.lc.db.entities;
 
-public class Company {
+import uz.lc.db.entities.base.UpdateBaseEntity;
+
+public class Company extends UpdateBaseEntity {
 }
