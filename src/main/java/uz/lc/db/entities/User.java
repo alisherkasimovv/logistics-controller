@@ -16,8 +16,10 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends UpdateBaseEntity {
+
     @Column(name = "username", unique = true, nullable = false)
     private String username;
+
     @Column(name = "password", nullable = false)
     private String password;
 
