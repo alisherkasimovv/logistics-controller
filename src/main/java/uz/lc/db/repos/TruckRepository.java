@@ -10,6 +10,7 @@ public interface TruckRepository extends JpaRepository<Truck,Integer> {
 
     @Override
     List<Truck> findAll();
-
+    Truck findById(int id);
+    Truck findByName(String name);
 
 }

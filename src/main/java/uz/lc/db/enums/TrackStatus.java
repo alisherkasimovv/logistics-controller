@@ -1,6 +1,6 @@
 package uz.lc.db.enums;
 
-public enum TruckStatus {
+public enum TrackStatus {
     PENDING,
     ACCEPTED,
     LOADING,
