@@ -1,26 +1,33 @@
 package uz.lc.db.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "db_drivers")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Driver extends UpdateBaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
 
-    @Column(name="Name")
-    String name;
+    @Column(name = "name")
+    private String name;
 
+    @Nullable
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "Trunck")
-    Integer truck;
+    @Nullable
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Nullable
+    @Column(name = "truck_id")
+    private Integer truckId;
 
 
 }

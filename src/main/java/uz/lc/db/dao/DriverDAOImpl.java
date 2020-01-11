@@ -2,6 +2,7 @@ package uz.lc.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.lc.collections.DriverAndMessage;
 import uz.lc.db.dao.interfaces.DriverDAO;
 import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Driver;
@@ -12,12 +13,10 @@ import java.util.List;
 @Service
 public class DriverDAOImpl implements DriverDAO {
     private DriverRepository repository;
-    private TruckDAO truckDAO;
 
     @Autowired
-    public  DriverDAOImpl(DriverRepository driverRepository,TruckDAO truckDAO){
+    public  DriverDAOImpl(DriverRepository driverRepository){
         repository=driverRepository;
-        this.truckDAO=truckDAO;
     }
 
     @Override
@@ -31,10 +30,24 @@ public class DriverDAOImpl implements DriverDAO {
     }
 
     @Override
-    public void saveDriver(Driver driver) {
+    public DriverAndMessage saveDriver(Driver driver) {
+        Driver saved;
 
-        repository.save(driver);
+        if (driver.getId() != null) {
+            Driver temp = this.getById(driver.getId());
 
+            temp.setFirstName(driver.getFirstName());
+            temp.setLastName(driver.getLastName());
+            temp.setName(driver.getName());
+
+            saved = repository.save(temp);
+        } else {
+            saved = repository.save(driver);
+        }
+        DriverAndMessage dam = new DriverAndMessage();
+        dam.setDriver(saved);
+        dam.setMessage("Driver has been saved.");
+        return dam;
     }
 
     @Override
