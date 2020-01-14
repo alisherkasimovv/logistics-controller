@@ -1,5 +1,6 @@
 package uz.lc.db.dao.interfaces;
 
+import uz.lc.collections.CompanyAndMessage;
 import uz.lc.db.entities.Company;
 
 
@@ -13,9 +14,7 @@ public interface CompanyDAO {
 
     Company getByName(String name);
 
-    void saveCompany(Company company);
-
-//    void editCompany(Company company);
+    CompanyAndMessage saveCompany(Company company);
 
     void deleteById(int id);
 

@@ -2,6 +2,7 @@ package uz.lc.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.lc.collections.UserAndMessage;
 import uz.lc.db.dao.interfaces.UserDAO;
 import uz.lc.db.entities.User;
 import uz.lc.db.repos.UserRepository;
@@ -34,8 +35,26 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void saveUser(User user) {
-        repository.save(user);
+    public UserAndMessage saveUser(User user) {
+        User saved;
+
+        if (user.getId() != null) {
+            User temp = this.getById(user.getId());
+
+            temp.setPassword(user.getPassword());
+            temp.setUsername(user.getUsername());
+            temp.setType(user.getType());
+
+            saved = repository.save(temp);
+        } else {
+            saved = repository.save(user);
+        }
+
+        UserAndMessage uam = new UserAndMessage();
+
+        uam.setUser(saved);
+        uam.setMessage("User has been saved.");
+        return uam;
     }
 
     @Override

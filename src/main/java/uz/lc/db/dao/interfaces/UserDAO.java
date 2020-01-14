@@ -1,5 +1,6 @@
 package uz.lc.db.dao.interfaces;
 
+import uz.lc.collections.UserAndMessage;
 import uz.lc.db.entities.User;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public interface UserDAO {
 
     User getByUsername(String username);
 
-    void saveUser(User user);
+    UserAndMessage saveUser(User user);
 
-    //    void editUser(User user);
+
     void deleteById(int id);
 }

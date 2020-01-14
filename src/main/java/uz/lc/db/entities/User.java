@@ -1,6 +1,6 @@
 package uz.lc.db.entities;
 
-import jdk.internal.jline.internal.Nullable;
+import com.sun.istack.internal.Nullable;
 import lombok.*;
 import uz.lc.db.entities.base.UpdateBaseEntity;
 import uz.lc.db.enums.Type;
