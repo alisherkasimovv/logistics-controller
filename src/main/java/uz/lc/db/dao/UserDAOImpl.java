@@ -39,7 +39,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         repository.deleteById(id);
     }
+
+
 }
