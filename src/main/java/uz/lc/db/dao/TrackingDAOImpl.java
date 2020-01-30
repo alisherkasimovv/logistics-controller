@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import uz.lc.collections.TrackingAndMessage;
 import uz.lc.configs.TrackNumberCreator;
 import uz.lc.db.dao.interfaces.DriverDAO;
+import uz.lc.db.dao.interfaces.DriverStatusDAO;
 import uz.lc.db.dao.interfaces.TrackingDAO;
 import uz.lc.db.entities.Driver;
 import uz.lc.db.entities.documents.Tracking;
@@ -20,10 +21,12 @@ public class TrackingDAOImpl implements TrackingDAO {
     private int reference = 0;
     private TrackingRepository repository;
     private DriverDAO driverDAO;
+    private DriverStatusDAO driverStatusDAO;
 
-    public TrackingDAOImpl(TrackingRepository repository, DriverDAO driverDAO) {
+    public TrackingDAOImpl(TrackingRepository repository, DriverDAO driverDAO, DriverStatusDAO driverStatusDAO) {
         this.repository = repository;
         this.driverDAO = driverDAO;
+        this.driverStatusDAO = driverStatusDAO;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class TrackingDAOImpl implements TrackingDAO {
 
     @Override
     public TrackingAndMessage saveNewTracking(Tracking tracking) {
-        String message = "";
+        String message;
 
         if (tracking.getDriverId() != null) {
             Driver driver = driverDAO.getById(tracking.getDriverId());
@@ -67,13 +70,11 @@ public class TrackingDAOImpl implements TrackingDAO {
 
             // Creating string from driver initials according to the information from DB
             // If first and last names are not present will be used driver's username.
-            String driverInitials = "";
+            String driverInitials;
             if (driver.getFirstName() != null && driver.getLastName() != null) {
                 driverInitials = driver.getFirstName().charAt(0) + "" + driver.getLastName().charAt(0);
                 driverInitials = driverInitials.toUpperCase();
-            } else {
-                driverInitials = driver.getName().substring(0,2).toUpperCase();
-            }
+            } else driverInitials = driver.getName().substring(0, 2).toUpperCase();
 
             if (driver.getTruckId() == null) driver.setTruckId(0);
             tracking.setTrackNumber(this.createTrackNumber(
@@ -83,6 +84,7 @@ public class TrackingDAOImpl implements TrackingDAO {
                     tracking.getRegion()
             ));
 
+            driverStatusDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber());
             message = "Tracking has been added." +
                     "<br>It's status changed to ACCEPTED." +
                     "<br>Tracking No. has been generated: " + tracking.getTrackNumber();
@@ -101,7 +103,14 @@ public class TrackingDAOImpl implements TrackingDAO {
     }
 
     @Override
-    public TrackingAndMessage editExistingTracking(Tracking tracking) {
+    public TrackingAndMessage editExistingTracking(Tracking tracking, TrackStatus newStatus) {
+        Tracking editingTrack = repository.findByTrackNumber(tracking.getTrackNumber());
+        if (newStatus == TrackStatus.ACCEPTED) {
+            Driver driver = driverDAO.getById(tracking.getDriverId());
+
+
+        }
+
         return null;
     }
 

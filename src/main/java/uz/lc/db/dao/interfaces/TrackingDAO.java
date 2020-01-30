@@ -15,7 +15,7 @@ public interface TrackingDAO {
     Tracking getById(Integer id);
     Tracking getByTrackingNumber(String trackNumber);
     TrackingAndMessage saveNewTracking(Tracking tracking);
-    TrackingAndMessage editExistingTracking(Tracking tracking);
+    TrackingAndMessage editExistingTracking(Tracking tracking, TrackStatus newStatus);
     TrackingAndMessage updateStatusOfTheTracking(TrackStatus trackStatus);
 
 }

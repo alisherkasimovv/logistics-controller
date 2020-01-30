@@ -35,7 +35,7 @@ public class TrackNumberCreator {
     public String generateTrackNumber() {
         return driver
                 + dateTime.getYear()
-                + dateTime.getMonth()
+                + dateTime.getMonthValue()
                 + dateTime.getDayOfMonth()
                 + "R"
                 + referenceGenerator()

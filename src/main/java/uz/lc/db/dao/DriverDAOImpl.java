@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uz.lc.collections.DriverAndMessage;
 import uz.lc.db.dao.interfaces.DriverDAO;
-import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Driver;
 import uz.lc.db.repos.DriverRepository;
 
