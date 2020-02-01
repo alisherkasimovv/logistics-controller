@@ -1,7 +1,7 @@
 package uz.lc.db.entities;
 
-import com.sun.istack.internal.Nullable;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
 import uz.lc.db.enums.Type;
 

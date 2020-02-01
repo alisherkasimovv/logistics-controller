@@ -16,6 +16,10 @@ public interface TrackingDAO {
     Tracking getByTrackingNumber(String trackNumber);
     TrackingAndMessage saveNewTracking(Tracking tracking);
     TrackingAndMessage editExistingTracking(Tracking tracking, TrackStatus newStatus);
-    TrackingAndMessage updateStatusOfTheTracking(TrackStatus trackStatus);
+    TrackingAndMessage updateStatusOfTheTracking(Tracking tracking);
+
+    // Methods for delayed tracks
+    TrackingAndMessage setTrackingAsDelayed(Tracking tracking);
+    TrackingAndMessage setTrackingAsContinued(Tracking tracking);
 
 }

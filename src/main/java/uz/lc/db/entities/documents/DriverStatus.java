@@ -8,9 +8,7 @@ import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
 import uz.lc.db.enums.Status;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "document_driver_statuses")
@@ -24,6 +22,7 @@ public class DriverStatus extends UpdateBaseEntity {
     private Integer driverId;
 
     @Column(name = "driver_status")
+    @Enumerated(value = EnumType.STRING)
     private Status driverStatus = Status.FREE;
 
     @Nullable

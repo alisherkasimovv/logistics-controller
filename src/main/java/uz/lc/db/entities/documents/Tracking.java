@@ -6,9 +6,7 @@ import uz.lc.db.entities.base.UpdateBaseEntity;
 import uz.lc.db.enums.Region;
 import uz.lc.db.enums.TrackStatus;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,6 +23,7 @@ public class Tracking extends UpdateBaseEntity {
     @Column(name = "is_job_done")
     private Boolean jobDone = false;
 
+    @Nullable
     @Column(name = "driver_id")
     private Integer driverId;
 
@@ -33,6 +32,7 @@ public class Tracking extends UpdateBaseEntity {
     private Integer companyId;
 
     @Column(name = "tracking_status")
+    @Enumerated(value = EnumType.STRING)
     private TrackStatus status = TrackStatus.PENDING;
 
     @Column(name = "agent_id")
@@ -69,6 +69,24 @@ public class Tracking extends UpdateBaseEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    // Delayed tracking fields
+    @Nullable
+    @Column(name = "tracking_status_before_delay")
+    private TrackStatus statusBeforeDelay;
+
+    @Nullable
+    @Column(name = "delay_reason", columnDefinition = "TEXT")
+    private String delayReason;
+
+    @Nullable
+    @Column(name = "date_delayed")
+    private LocalDateTime dateDelayed;
+
+    @Nullable
+    @Column(name = "date_continued")
+    private LocalDateTime dateContinued;
+    //
+
     @Nullable
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
@@ -82,11 +100,19 @@ public class Tracking extends UpdateBaseEntity {
     private LocalDateTime dateLoaded;
 
     @Nullable
+    @Column(name = "date_going")
+    private LocalDateTime dateGoing;
+
+    @Nullable
     @Column(name = "date_delivered")
     private LocalDateTime dateDelivered;
 
     @Nullable
     @Column(name = "date_shipped")
     private LocalDateTime dateShipped;
+
+    @Nullable
+    @Column(name = "date_done")
+    private LocalDateTime dateDone;
 
 }

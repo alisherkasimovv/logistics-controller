@@ -6,5 +6,6 @@ public enum TrackStatus {
     LOADING,
     GOING,
     SHIPPING,
-    DONE
+    DONE,
+    DELAYED
 }
