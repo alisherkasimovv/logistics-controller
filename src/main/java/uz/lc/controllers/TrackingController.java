@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tracking")
+@CrossOrigin("http://localhost:3000")
 public class TrackingController {
 
     private TrackingDAO trackingDAO;

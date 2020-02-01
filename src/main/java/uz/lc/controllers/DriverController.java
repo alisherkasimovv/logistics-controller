@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/drivers")
+@CrossOrigin("http://localhost:3000")
 public class DriverController {
     private DriverDAO driverDAO;
 

@@ -191,8 +191,29 @@ public class TrackingDAOImpl implements TrackingDAO {
                 updatingTrack.setDriverId(tracking.getDriverId());
                 updatingTrack.setDateAccepted(LocalDateTime.now());
 
+                // Creating string from driver initials according to the information from DB
+                // If first and last names are not present will be used driver's username.
+                String driverInitials;
+                if (driver.getFirstName() != null && driver.getLastName() != null) {
+                    driverInitials = driver.getFirstName().charAt(0) + "" + driver.getLastName().charAt(0);
+                    driverInitials = driverInitials.toUpperCase();
+                } else driverInitials = driver.getName().substring(0, 2).toUpperCase();
+
+                if (driver.getTruckId() == null) driver.setTruckId(0);
+                tracking.setTrackNumber(this.createTrackNumber(
+                        driverInitials,
+                        driver.getTruckId(),
+                        LocalDateTime.now(),
+                        tracking.getRegion()
+                ));
+
                 driverStatusDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber());
 
+                break;
+
+            case ACCEPTED:
+                updatingTrack.setStatus(TrackStatus.LOADING);
+                updatingTrack.setDateAccepted(LocalDateTime.now());
                 break;
 
             case LOADING:

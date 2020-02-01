@@ -10,10 +10,10 @@ import uz.lc.db.dao.interfaces.UserDAO;
 import uz.lc.db.entities.User;
 
 import java.util.List;
-@CrossOrigin("http://localhost:3000")
+
 @RestController
 @RequestMapping("/users")
-@Service
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     private UserDAO dao;
 

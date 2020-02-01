@@ -10,11 +10,11 @@ import uz.lc.db.entities.Company;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/companies")
-@Service
+@CrossOrigin("http://localhost:3000")
 public class CompanyController {
+
     private CompanyDAO dao;
 
     @Autowired
@@ -45,3 +45,5 @@ public class CompanyController {
     }
 
 }
+
+

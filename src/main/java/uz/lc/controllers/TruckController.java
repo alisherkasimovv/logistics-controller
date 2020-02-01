@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/trucks")
+@CrossOrigin("http://localhost:3000")
 public class TruckController {
     private TruckDAO truckDAO;
 
