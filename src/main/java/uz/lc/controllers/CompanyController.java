@@ -1,10 +1,9 @@
 package uz.lc.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import uz.lc.collections.CompanyAndMessage;
 import uz.lc.db.dao.interfaces.CompanyDAO;
 import uz.lc.db.entities.Company;
 
@@ -17,7 +16,6 @@ public class CompanyController {
 
     private CompanyDAO dao;
 
-    @Autowired
     public CompanyController(CompanyDAO dao) {
         this.dao = dao;
     }
@@ -39,9 +37,8 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/save")
-    public HttpStatus saveUser(@RequestBody Company company) {
-        dao.saveCompany(company);
-        return HttpStatus.OK;
+    public ResponseEntity<CompanyAndMessage> saveCompany(@RequestBody Company company) {
+        return new ResponseEntity<>(dao.saveCompany(company), HttpStatus.OK);
     }
 
 }

@@ -34,6 +34,7 @@ public class DriverDAOImpl implements DriverDAO {
     @Override
     public DriverAndMessage saveDriver(Driver driver) {
         Driver saved;
+        DriverAndMessage dam = new DriverAndMessage();
 
         if (driver.getId() != null) {
             Driver temp = this.getById(driver.getId());
@@ -43,15 +44,15 @@ public class DriverDAOImpl implements DriverDAO {
             temp.setName(driver.getName());
 
             saved = repository.save(temp);
+            dam.setMessage("Driver has been updated.");
         } else {
             saved = repository.save(driver);
+            dam.setMessage("New driver has been saved.");
         }
 
         statusDAO.createNewStatusForDriver(saved.getId());
 
-        DriverAndMessage dam = new DriverAndMessage();
         dam.setDriver(saved);
-        dam.setMessage("Driver has been saved.");
         return dam;
     }
 

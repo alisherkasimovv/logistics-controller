@@ -37,6 +37,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public UserAndMessage saveUser(User user) {
         User saved;
+        UserAndMessage uam = new UserAndMessage();
 
         if (user.getId() != null) {
             User temp = this.getById(user.getId());
@@ -46,14 +47,13 @@ public class UserDAOImpl implements UserDAO {
             temp.setType(user.getType());
 
             saved = repository.save(temp);
+            uam.setMessage("User has been updated.");
         } else {
             saved = repository.save(user);
+            uam.setMessage("New user has been saved.");
         }
 
-        UserAndMessage uam = new UserAndMessage();
-
         uam.setUser(saved);
-        uam.setMessage("User has been saved.");
         return uam;
     }
 

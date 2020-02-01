@@ -36,6 +36,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     @Override
     public CompanyAndMessage saveCompany(Company company) {
         Company saved;
+        CompanyAndMessage cam = new CompanyAndMessage();
 
         if (company.getId() != null) {
             Company temp = this.getById(company.getId());
@@ -46,13 +47,13 @@ public class CompanyDAOImpl implements CompanyDAO {
             temp.setLongitude(company.getLongitude());
 
             saved = repository.save(temp);
+            cam.setMessage("Company has been updated.");
         } else {
             saved = repository.save(company);
+            cam.setMessage("New company has been saved.");
         }
 
-        CompanyAndMessage cam = new CompanyAndMessage();
         cam.setCompany(saved);
-        cam.setMessage("Company has been saved.");
         return cam;
     }
 

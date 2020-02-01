@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.lc.collections.DriverAndMessage;
 import uz.lc.db.dao.interfaces.DriverDAO;
 import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Driver;
@@ -40,8 +41,7 @@ public class DriverController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<List<Driver>> saveDriver(@Valid @RequestBody Driver driver) {
-        driverDAO.saveDriver(driver);
-        return new ResponseEntity<>(driverDAO.get(), HttpStatus.OK);
+    public ResponseEntity<DriverAndMessage> saveDriver(@Valid @RequestBody Driver driver) {
+        return new ResponseEntity<>(driverDAO.saveDriver(driver), HttpStatus.OK);
     }
 }
