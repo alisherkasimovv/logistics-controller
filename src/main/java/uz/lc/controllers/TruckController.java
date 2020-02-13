@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.lc.collections.TruckAndMessage;
 import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Truck;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -39,7 +39,7 @@ public class TruckController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<TruckAndMessage> saveTruck(@Valid @RequestBody Truck truck) {
+    public ResponseEntity<ReturningObjectAndMessage> saveTruck(@Valid @RequestBody Truck truck) {
         return new ResponseEntity<>(truckDAO.saveTruck(truck), HttpStatus.OK);
     }
 }

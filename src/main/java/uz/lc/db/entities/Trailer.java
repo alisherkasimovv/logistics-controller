@@ -1,18 +1,27 @@
 package uz.lc.db.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="db_trucks")
+@Table(name = "db_trailers")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Truck extends UpdateBaseEntity {
+public class Trailer extends UpdateBaseEntity {
+
+    @Nullable
+    @Column(name = "truck_id")
+    private Integer truckId;
 
     @Nullable
     @Column(name = "model")
@@ -25,5 +34,9 @@ public class Truck extends UpdateBaseEntity {
     @Nullable
     @Column(name = "technical_certificate")
     private String technicalCertificate;
+
+    @Nullable
+    @Column(name = "capacity")
+    private Double capacity;
 
 }

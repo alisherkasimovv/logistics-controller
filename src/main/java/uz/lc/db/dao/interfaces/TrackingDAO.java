@@ -1,6 +1,6 @@
 package uz.lc.db.dao.interfaces;
 
-import uz.lc.collections.TrackingAndMessage;
+import uz.lc.dto.collections.TrackingAndMessage;
 import uz.lc.db.entities.documents.Tracking;
 import uz.lc.db.enums.TrackStatus;
 

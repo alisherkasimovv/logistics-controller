@@ -3,11 +3,11 @@ package uz.lc.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import uz.lc.collections.UserAndMessage;
+import uz.lc.db.dao.UserDAOImpl;
 import uz.lc.db.dao.interfaces.UserDAO;
 import uz.lc.db.entities.User;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class UserController {
     private UserDAO dao;
 
     @Autowired
-    public UserController(UserDAO dao) {
+    public UserController(UserDAOImpl dao) {
         this.dao = dao;
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<UserAndMessage> saveUser(@RequestBody User user) {
+    public ResponseEntity<ReturningObjectAndMessage> saveUser(@RequestBody User user) {
         return new ResponseEntity<>(dao.saveUser(user), HttpStatus.OK);
     }
 

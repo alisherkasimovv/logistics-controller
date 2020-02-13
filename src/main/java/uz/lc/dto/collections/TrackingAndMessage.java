@@ -1,18 +1,18 @@
-package uz.lc.collections;
+package uz.lc.dto.collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.lc.db.entities.Driver;
+import uz.lc.db.entities.documents.Tracking;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class DriverAndMessage {
+@Getter
+public class TrackingAndMessage {
 
-    private Driver driver;
     private String message;
+    private Tracking tracking;
 
 }

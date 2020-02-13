@@ -1,66 +1,75 @@
 package uz.lc.db.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.lc.collections.DriverAndMessage;
-import uz.lc.db.dao.interfaces.DriverDAO;
-import uz.lc.db.dao.interfaces.DriverStatusDAO;
-import uz.lc.db.entities.Driver;
-import uz.lc.db.repos.DriverRepository;
+import uz.lc.db.dao.interfaces.DriverWorkloadDAO;
+import uz.lc.db.dao.interfaces.UserDAO;
+import uz.lc.db.entities.User;
+import uz.lc.db.enums.UserType;
+import uz.lc.db.repos.UserRepository;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import java.util.List;
 
 @Service
-public class DriverDAOImpl implements DriverDAO {
-    private DriverRepository repository;
-    private DriverStatusDAO statusDAO;
+public class DriverDAOImpl implements UserDAO {
+    private UserRepository repository;
+    private DriverWorkloadDAO statusDAO;
 
-    @Autowired
-    public  DriverDAOImpl(DriverRepository driverRepository, DriverStatusDAO statusDAO){
-        repository=driverRepository;
+    public  DriverDAOImpl(UserRepository repository, DriverWorkloadDAO statusDAO){
+        this.repository = repository;
         this.statusDAO = statusDAO;
     }
 
     @Override
-    public List<Driver> get() {
+    public List<User> getAll() {
         return repository.findAll();
     }
 
     @Override
-    public Driver getById(int id) {
+    public List<User> getAllUsersByType() {
+        return repository.findAllByDeletedFalseAndUserType(UserType.DRIVER);
+    }
+
+    @Override
+    public User getById(int id) {
         return repository.findById(id);
     }
 
     @Override
-    public DriverAndMessage saveDriver(Driver driver) {
-        Driver saved;
-        DriverAndMessage dam = new DriverAndMessage();
+    public User getByUsername(String username) {
+        return null;
+    }
 
-        if (driver.getId() != null) {
-            Driver temp = this.getById(driver.getId());
+    @Override
+    public ReturningObjectAndMessage saveUser(User user) {
+        User saved;
+        ReturningObjectAndMessage roam = new ReturningObjectAndMessage();
 
-            temp.setFirstName(driver.getFirstName());
-            temp.setLastName(driver.getLastName());
-            temp.setName(driver.getName());
+        if (user.getId() != null) {
+            User temp = this.getById(user.getId());
+
+            temp.setFirstName(user.getFirstName());
+            temp.setLastName(user.getLastName());
+            temp.setUserType(UserType.DRIVER);
 
             saved = repository.save(temp);
-            dam.setMessage("Driver has been updated.");
+            roam.setMessage("Driver has been updated.");
         } else {
-            saved = repository.save(driver);
-            dam.setMessage("New driver has been saved.");
+            user.setUserType(UserType.DRIVER);
+            saved = repository.save(user);
+            roam.setMessage("New driver has been saved.");
         }
 
         statusDAO.createNewStatusForDriver(saved.getId());
 
-        dam.setDriver(saved);
-        return dam;
+        roam.setReturningObject(saved);
+        return roam;
     }
 
     @Override
     public void deleteById(int id) {
-
-        Driver driver=repository.findById(id);
-        driver.setDeleted(true);
-        repository.save(driver);
+        User user=repository.findById(id);
+        user.setDeleted(true);
+        repository.save(user);
     }
 }

@@ -1,12 +1,12 @@
 package uz.lc.db.dao;
 
 import org.springframework.stereotype.Service;
-import uz.lc.collections.TrackingAndMessage;
+import uz.lc.dto.collections.TrackingAndMessage;
 import uz.lc.configs.TrackNumberCreator;
-import uz.lc.db.dao.interfaces.DriverDAO;
-import uz.lc.db.dao.interfaces.DriverStatusDAO;
+import uz.lc.db.dao.interfaces.DriverWorkloadDAO;
 import uz.lc.db.dao.interfaces.TrackingDAO;
-import uz.lc.db.entities.Driver;
+import uz.lc.db.dao.interfaces.UserDAO;
+import uz.lc.db.entities.User;
 import uz.lc.db.entities.documents.Tracking;
 import uz.lc.db.enums.Region;
 import uz.lc.db.enums.TrackStatus;
@@ -16,18 +16,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+// TODO Region definition should be changed
 @Service
 public class TrackingDAOImpl implements TrackingDAO {
 
     private int reference = 0;
     private TrackingRepository repository;
-    private DriverDAO driverDAO;
-    private DriverStatusDAO driverStatusDAO;
+    private UserDAO driverDAO;
+    private DriverWorkloadDAO driverWorkloadDAO;
 
-    public TrackingDAOImpl(TrackingRepository repository, DriverDAO driverDAO, DriverStatusDAO driverStatusDAO) {
+    public TrackingDAOImpl(TrackingRepository repository, DriverDAOImpl driverDAO, DriverWorkloadDAO driverWorkloadDAO) {
         this.repository = repository;
         this.driverDAO = driverDAO;
-        this.driverStatusDAO = driverStatusDAO;
+        this.driverWorkloadDAO = driverWorkloadDAO;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class TrackingDAOImpl implements TrackingDAO {
         String message;
 
         if (tracking.getDriverId() != null) {
-            Driver driver = driverDAO.getById(tracking.getDriverId());
+            User driver = driverDAO.getById(tracking.getDriverId());
 
             tracking.setStatus(TrackStatus.ACCEPTED);
             tracking.setDateCreated(LocalDateTime.now());
@@ -86,17 +87,17 @@ public class TrackingDAOImpl implements TrackingDAO {
             if (driver.getFirstName() != null && driver.getLastName() != null) {
                 driverInitials = driver.getFirstName().charAt(0) + "" + driver.getLastName().charAt(0);
                 driverInitials = driverInitials.toUpperCase();
-            } else driverInitials = driver.getName().substring(0, 2).toUpperCase();
+            } else driverInitials = driver.getUsername().substring(0, 2).toUpperCase();
 
             if (driver.getTruckId() == null) driver.setTruckId(0);
             tracking.setTrackNumber(this.createTrackNumber(
                     driverInitials,
                     driver.getTruckId(),
                     LocalDateTime.now(),
-                    tracking.getRegion()
+                    Region.TAS
             ));
 
-            driverStatusDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber());
+            driverWorkloadDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber(), tracking.getId());
             message = "Tracking has been added." +
                     "<br>It's status changed to ACCEPTED." +
                     "<br>Tracking No. has been generated: " + tracking.getTrackNumber();
@@ -183,7 +184,7 @@ public class TrackingDAOImpl implements TrackingDAO {
         Tracking updatingTrack = repository.findByTrackNumber(tracking.getTrackNumber());
 
         assert tracking.getDriverId() != null;
-        Driver driver = driverDAO.getById(tracking.getDriverId());
+        User driver = driverDAO.getById(tracking.getDriverId());
 
         switch (tracking.getStatus()) {
             case PENDING:
@@ -197,17 +198,17 @@ public class TrackingDAOImpl implements TrackingDAO {
                 if (driver.getFirstName() != null && driver.getLastName() != null) {
                     driverInitials = driver.getFirstName().charAt(0) + "" + driver.getLastName().charAt(0);
                     driverInitials = driverInitials.toUpperCase();
-                } else driverInitials = driver.getName().substring(0, 2).toUpperCase();
+                } else driverInitials = driver.getUsername().substring(0, 2).toUpperCase();
 
                 if (driver.getTruckId() == null) driver.setTruckId(0);
                 tracking.setTrackNumber(this.createTrackNumber(
                         driverInitials,
                         driver.getTruckId(),
                         LocalDateTime.now(),
-                        tracking.getRegion()
+                        Region.TAS
                 ));
 
-                driverStatusDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber());
+                driverWorkloadDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber(), tracking.getId());
 
                 break;
 
@@ -232,7 +233,7 @@ public class TrackingDAOImpl implements TrackingDAO {
                 updatingTrack.setDateDone(LocalDateTime.now());
                 updatingTrack.setJobDone(true);
 
-                driverStatusDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber());
+                driverWorkloadDAO.setDriverStatus(driver.getId(), tracking.getTrackNumber(), tracking.getId());
 
                 break;
         }

@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.lc.collections.DriverAndMessage;
-import uz.lc.db.dao.interfaces.DriverDAO;
-import uz.lc.db.dao.interfaces.TruckDAO;
-import uz.lc.db.entities.Driver;
-import uz.lc.db.entities.Truck;
+import uz.lc.db.dao.DriverDAOImpl;
+import uz.lc.db.dao.interfaces.DriverWorkloadDAO;
+import uz.lc.db.dao.interfaces.UserDAO;
+import uz.lc.db.entities.User;
+import uz.lc.dto.DriversWithStatuses;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,31 +18,39 @@ import java.util.List;
 @RequestMapping("/drivers")
 @CrossOrigin("http://localhost:3000")
 public class DriverController {
-    private DriverDAO driverDAO;
+
+    private UserDAO userDAO;
+    private DriverWorkloadDAO workloadDAO;
 
     @Autowired
-    public DriverController(DriverDAO driverDAO) {
-        this.driverDAO=driverDAO;
+    public DriverController(DriverDAOImpl userDAO, DriverWorkloadDAO workloadDAO) {
+        this.userDAO = userDAO;
+        this.workloadDAO = workloadDAO;
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity<List<Driver>> getAllDrivers() {
-        return new ResponseEntity<>(driverDAO.get(), HttpStatus.OK);
+    public ResponseEntity<List<User>> getAllDrivers() {
+        return new ResponseEntity<>(userDAO.getAllUsersByType(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get/{id}")
-    public ResponseEntity<Driver> getDriver(@PathVariable int id) {
-        return new ResponseEntity<>(driverDAO.getById(id), HttpStatus.OK);
+    public ResponseEntity<User> getDriver(@PathVariable int id) {
+        return new ResponseEntity<>(userDAO.getById(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/delete/{id}")
     public HttpStatus deleteDriver(@PathVariable int id) {
-        driverDAO.deleteById(id);
+        userDAO.deleteById(id);
         return HttpStatus.OK;
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<DriverAndMessage> saveDriver(@Valid @RequestBody Driver driver) {
-        return new ResponseEntity<>(driverDAO.saveDriver(driver), HttpStatus.OK);
+    public ResponseEntity<ReturningObjectAndMessage> saveDriver(@Valid @RequestBody User user) {
+        return new ResponseEntity<>(userDAO.saveUser(user), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get/overall-info")
+    public ResponseEntity<DriversWithStatuses> collectInfoAboutDrivers() {
+        return new ResponseEntity<>(workloadDAO.getAllDriversSortedByTheirStatuses(), HttpStatus.OK);
     }
 }

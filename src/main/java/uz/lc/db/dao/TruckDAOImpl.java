@@ -2,11 +2,10 @@ package uz.lc.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.lc.collections.TruckAndMessage;
-import uz.lc.db.dao.interfaces.DriverDAO;
 import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Truck;
 import uz.lc.db.repos.TruckRepository;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import java.util.List;
 @Service
@@ -29,25 +28,25 @@ public class TruckDAOImpl implements TruckDAO{
     }
 
     @Override
-    public TruckAndMessage saveTruck(Truck truck) {
+    public ReturningObjectAndMessage saveTruck(Truck truck) {
         Truck saved;
-        TruckAndMessage tam = new TruckAndMessage();
+        ReturningObjectAndMessage roam = new ReturningObjectAndMessage();
 
         if (truck.getId() != null) {
             Truck temp = this.getById(truck.getId());
 
-            temp.setName(truck.getName());
-            temp.setCapacity(truck.getCapacity());
+            temp.setModel(truck.getModel());
+            temp.setPlateNumber(truck.getPlateNumber());
 
             saved = repository.save(temp);
-            tam.setMessage("Truck has been updated.");
+            roam.setMessage("Truck with id - " + saved.getId() + " has been updated.");
         } else {
             saved = repository.save(truck);
-            tam.setMessage("New truck has been saved.");
+            roam.setMessage("New truck has been saved.");
         }
 
-        tam.setTruck(saved);
-        return tam;
+        roam.setReturningObject(saved);
+        return roam;
     }
 
     @Override

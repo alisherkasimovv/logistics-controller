@@ -1,6 +1,6 @@
 package uz.lc.db.enums;
 
-public enum Status {
+public enum DriverStatus {
     FREE,
     ON_ROAD
 }

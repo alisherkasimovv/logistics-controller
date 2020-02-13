@@ -1,18 +1,17 @@
-package uz.lc.collections;
+package uz.lc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.lc.db.entities.documents.Tracking;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
-public class TrackingAndMessage {
+@Setter
+public class ReturningObjectAndMessage {
 
+    private Object returningObject;
     private String message;
-    private Tracking tracking;
 
 }

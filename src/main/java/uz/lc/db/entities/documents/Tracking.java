@@ -17,11 +17,15 @@ import java.time.LocalDateTime;
 @Setter
 public class Tracking extends UpdateBaseEntity {
 
+    // TODO Tracking number for now is not necessary thing.
     @Column(name = "track_number")
     private String trackNumber;
 
     @Column(name = "is_job_done")
     private Boolean jobDone = false;
+
+    @Column(name = "is_job_totally_cancelled")
+    private Boolean jobTotallyCancelled = false;
 
     @Nullable
     @Column(name = "driver_id")
@@ -37,34 +41,6 @@ public class Tracking extends UpdateBaseEntity {
 
     @Column(name = "agent_id")
     private Integer agentId;
-
-    // FROM
-    @Nullable
-    @Column(name = "latitude_from")
-    private String latitudeFrom;
-
-    @Nullable
-    @Column(name = "longitude_from")
-    private String longitudeFrom;
-
-    @Nullable
-    @Column(name = "address_from")
-    private String addressFrom;
-
-    // TO
-    @Nullable
-    @Column(name = "latitude_to")
-    private String latitudeTo;
-
-    @Nullable
-    @Column(name = "longitude_to")
-    private String longitudeTo;
-
-    @Column(name = "address_to")
-    private String addressTo;
-
-    @Column(name = "region")
-    private Region region = Region.TAS;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -86,6 +62,21 @@ public class Tracking extends UpdateBaseEntity {
     @Column(name = "date_continued")
     private LocalDateTime dateContinued;
     //
+
+    // Cancelled tracking
+    @Nullable
+    @Column(name = "cancel_reason", columnDefinition = "TEXT")
+    private String cancelReason;
+
+    @Nullable
+    @Column(name = "date_cancelled")
+    private LocalDateTime dateCancelled;
+    //
+
+    // Evidence of done job
+    @Nullable
+    @Column(name = "invoice_image")
+    private String invoiceImage;
 
     @Nullable
     @Column(name = "date_created")

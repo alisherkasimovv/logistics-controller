@@ -2,25 +2,59 @@ package uz.lc.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.lc.collections.CompanyAndMessage;
 import uz.lc.db.dao.interfaces.CompanyDAO;
+import uz.lc.db.dao.interfaces.DestinationDAO;
 import uz.lc.db.entities.Company;
+import uz.lc.db.entities.Destination;
 import uz.lc.db.repos.CompanyRepository;
+import uz.lc.dto.CompanyWithDestinations;
+import uz.lc.dto.ReturningObjectAndMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CompanyDAOImpl implements CompanyDAO {
     private CompanyRepository repository;
+    private DestinationDAO destinationDAO;
 
     @Autowired
-    public CompanyDAOImpl(CompanyRepository repository) {
+    public CompanyDAOImpl(CompanyRepository repository, DestinationDAO destinationDAO) {
         this.repository = repository;
+        this.destinationDAO = destinationDAO;
     }
 
     @Override
     public List<Company> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<CompanyWithDestinations> getAllCompaniesWithDestinations() {
+        List<Company> companies = this.getAll();
+        List<CompanyWithDestinations> cwdList = new ArrayList<>();
+
+        for (Company company : companies) {
+            CompanyWithDestinations cwd = new CompanyWithDestinations();
+            cwd.setCompany(company);
+            cwd.setDestinations(destinationDAO.getAllDestinationsForParticularCompany(company.getId()));
+
+            cwdList.add(cwd);
+        }
+
+        return cwdList;
+    }
+
+    @Override
+    public CompanyWithDestinations getOneCompanyWithDestinations(int id) {
+        Company company = this.getById(id);
+        List<Destination> destinations = destinationDAO.getAllDestinationsForParticularCompany(company.getId());
+
+        CompanyWithDestinations cwd = new CompanyWithDestinations();
+        cwd.setCompany(company);
+        cwd.setDestinations(destinations);
+
+        return cwd;
     }
 
     @Override
@@ -34,27 +68,25 @@ public class CompanyDAOImpl implements CompanyDAO {
     }
 
     @Override
-    public CompanyAndMessage saveCompany(Company company) {
+    public ReturningObjectAndMessage saveCompany(Company company) {
         Company saved;
-        CompanyAndMessage cam = new CompanyAndMessage();
+        ReturningObjectAndMessage roam = new ReturningObjectAndMessage();
 
         if (company.getId() != null) {
             Company temp = this.getById(company.getId());
 
             temp.setName(company.getName());
             temp.setAddress(company.getAddress());
-            temp.setLatitude(company.getLatitude());
-            temp.setLongitude(company.getLongitude());
 
             saved = repository.save(temp);
-            cam.setMessage("Company has been updated.");
+            roam.setMessage("Company has been updated.");
         } else {
             saved = repository.save(company);
-            cam.setMessage("New company has been saved.");
+            roam.setMessage("New company has been saved.");
         }
 
-        cam.setCompany(saved);
-        return cam;
+        roam.setReturningObject(saved);
+        return roam;
     }
 
     @Override

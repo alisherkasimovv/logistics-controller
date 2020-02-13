@@ -3,7 +3,7 @@ package uz.lc.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.lc.collections.TrackingAndMessage;
+import uz.lc.dto.collections.TrackingAndMessage;
 import uz.lc.db.dao.interfaces.TrackingDAO;
 import uz.lc.db.entities.documents.Tracking;
 

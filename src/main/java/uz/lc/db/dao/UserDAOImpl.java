@@ -1,10 +1,12 @@
 package uz.lc.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import uz.lc.collections.UserAndMessage;
+import uz.lc.dto.ReturningObjectAndMessage;
 import uz.lc.db.dao.interfaces.UserDAO;
 import uz.lc.db.entities.User;
+import uz.lc.db.enums.UserType;
 import uz.lc.db.repos.UserRepository;
 
 import java.util.List;
@@ -25,6 +27,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public List<User> getAllUsersByType() {
+        return repository.findAllByDeletedFalseAndUserType(UserType.AGENT);
+    }
+
+    @Override
     public User getById(int id) {
         return repository.findById(id);
     }
@@ -35,26 +42,28 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public UserAndMessage saveUser(User user) {
+    public ReturningObjectAndMessage saveUser(User user) {
         User saved;
-        UserAndMessage uam = new UserAndMessage();
+        ReturningObjectAndMessage roam = new ReturningObjectAndMessage();
 
         if (user.getId() != null) {
             User temp = this.getById(user.getId());
 
             temp.setPassword(user.getPassword());
             temp.setUsername(user.getUsername());
-            temp.setType(user.getType());
+            temp.setUserType(UserType.AGENT);
 
-            saved = repository.save(temp);
-            uam.setMessage("User has been updated.");
+            saved = saveParticularUser(temp);
+            roam.setMessage("User has been updated.");
         } else {
-            saved = repository.save(user);
-            uam.setMessage("New user has been saved.");
+            user.setUserType(UserType.AGENT);
+            saved = saveParticularUser(user);
+            roam.setMessage("New user has been saved.");
         }
 
-        uam.setUser(saved);
-        return uam;
+        if (saved == null) roam.setMessage("This username has already taken. Please, enter new.");
+        roam.setReturningObject(saved);
+        return roam;
     }
 
     @Override
@@ -62,5 +71,13 @@ public class UserDAOImpl implements UserDAO {
         repository.deleteById(id);
     }
 
-
+    private User saveParticularUser(User user) {
+        User u;
+        try {
+            u = repository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            return null;
+        }
+        return u;
+    }
 }

@@ -3,11 +3,9 @@ package uz.lc.db.entities;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
-import uz.lc.db.enums.Type;
+import uz.lc.db.enums.UserType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "db_users")
 @Entity
@@ -25,6 +23,19 @@ public class User extends UpdateBaseEntity {
 
     @Nullable
     @Column(name = "user_type")
-    private Type type;
+    @Enumerated(value = EnumType.STRING)
+    private UserType userType;
+
+    @Nullable
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Nullable
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Nullable
+    @Column(name = "truck_id")
+    private Integer truckId;
 
 }

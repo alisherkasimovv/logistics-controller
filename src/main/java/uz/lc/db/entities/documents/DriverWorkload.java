@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 import uz.lc.db.entities.base.UpdateBaseEntity;
-import uz.lc.db.enums.Status;
+import uz.lc.db.enums.DriverStatus;
 
 import javax.persistence.*;
 
@@ -16,14 +16,18 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DriverStatus extends UpdateBaseEntity {
+public class DriverWorkload extends UpdateBaseEntity {
 
     @Column(name = "driver_id")
     private Integer driverId;
 
     @Column(name = "driver_status")
     @Enumerated(value = EnumType.STRING)
-    private Status driverStatus = Status.FREE;
+    private DriverStatus driverStatus = DriverStatus.FREE;
+
+    @Nullable
+    @Column(name = "current_tracking_id")
+    private Integer currentTrackingId;
 
     @Nullable
     @Column(name = "track_number")
