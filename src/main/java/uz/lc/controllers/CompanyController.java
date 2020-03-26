@@ -28,6 +28,11 @@ public class CompanyController {
         return new ResponseEntity<>(companyDAO.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/get/deleted")
+    public ResponseEntity<List<Company>> getAllDeletedCompany() {
+        return new ResponseEntity<>(companyDAO.getAllDeleted(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/get/with-destinations")
     public ResponseEntity<List<CompanyWithDestinations>> getAllCompaniesWithDestinations() {
         return new ResponseEntity<>(companyDAO.getAllCompaniesWithDestinations(), HttpStatus.OK);
@@ -55,5 +60,3 @@ public class CompanyController {
     }
 
 }
-
-

@@ -1,7 +1,6 @@
 package uz.lc.db.dao;
 
 import org.springframework.stereotype.Service;
-import uz.lc.dto.collections.TrackingAndMessage;
 import uz.lc.configs.TrackNumberCreator;
 import uz.lc.db.dao.interfaces.DriverWorkloadDAO;
 import uz.lc.db.dao.interfaces.TrackingDAO;
@@ -11,6 +10,7 @@ import uz.lc.db.entities.documents.Tracking;
 import uz.lc.db.enums.Region;
 import uz.lc.db.enums.TrackStatus;
 import uz.lc.db.repos.TrackingRepository;
+import uz.lc.dto.ReturningObjectAndMessage;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +25,7 @@ public class TrackingDAOImpl implements TrackingDAO {
     private UserDAO driverDAO;
     private DriverWorkloadDAO driverWorkloadDAO;
 
-    public TrackingDAOImpl(TrackingRepository repository, DriverDAOImpl driverDAO, DriverWorkloadDAO driverWorkloadDAO) {
+    public TrackingDAOImpl(TrackingRepository repository, UserDAO driverDAO, DriverWorkloadDAO driverWorkloadDAO) {
         this.repository = repository;
         this.driverDAO = driverDAO;
         this.driverWorkloadDAO = driverWorkloadDAO;
@@ -71,7 +71,7 @@ public class TrackingDAOImpl implements TrackingDAO {
      * @return Updated tracking info and a message.
      */
     @Override
-    public TrackingAndMessage saveNewTracking(Tracking tracking) {
+    public ReturningObjectAndMessage saveNewTracking(Tracking tracking) {
         String message;
 
         if (tracking.getDriverId() != null) {
@@ -110,14 +110,14 @@ public class TrackingDAOImpl implements TrackingDAO {
         }
         Tracking track = repository.save(tracking);
 
-        TrackingAndMessage tam = new TrackingAndMessage();
-        tam.setTracking(track);
+        ReturningObjectAndMessage tam = new ReturningObjectAndMessage();
+        tam.setReturningObject(track);
         tam.setMessage(message);
         return tam;
     }
 
     @Override
-    public TrackingAndMessage editExistingTracking(Tracking tracking, TrackStatus newStatus) {
+    public ReturningObjectAndMessage editExistingTracking(Tracking tracking, TrackStatus newStatus) {
         return null;
     }
 
@@ -133,7 +133,7 @@ public class TrackingDAOImpl implements TrackingDAO {
      * @return Updated tracking info and a message.
      */
     @Override
-    public TrackingAndMessage setTrackingAsDelayed(Tracking tracking) {
+    public ReturningObjectAndMessage setTrackingAsDelayed(Tracking tracking) {
         Tracking delayingTrack = repository.findByTrackNumber(tracking.getTrackNumber());
 
         delayingTrack.setStatusBeforeDelay(delayingTrack.getStatus());
@@ -143,8 +143,8 @@ public class TrackingDAOImpl implements TrackingDAO {
 
         Tracking saved = repository.save(delayingTrack);
 
-        TrackingAndMessage tam = new TrackingAndMessage();
-        tam.setTracking(saved);
+        ReturningObjectAndMessage tam = new ReturningObjectAndMessage();
+        tam.setReturningObject(saved);
         assert saved.getDateDelayed() != null;
         tam.setMessage("Tracking " + saved.getTrackNumber() + " has been delayed at "
                 + saved.getDateDelayed().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + ".");
@@ -161,7 +161,7 @@ public class TrackingDAOImpl implements TrackingDAO {
      * @return Updated tracking info and a message.
      */
     @Override
-    public TrackingAndMessage setTrackingAsContinued(Tracking tracking) {
+    public ReturningObjectAndMessage setTrackingAsContinued(Tracking tracking) {
         Tracking continuingTrack = repository.findByTrackNumber(tracking.getTrackNumber());
 
         continuingTrack.setStatus(continuingTrack.getStatusBeforeDelay());
@@ -169,8 +169,8 @@ public class TrackingDAOImpl implements TrackingDAO {
 
         Tracking saved = repository.save(continuingTrack);
 
-        TrackingAndMessage tam = new TrackingAndMessage();
-        tam.setTracking(saved);
+        ReturningObjectAndMessage tam = new ReturningObjectAndMessage();
+        tam.setReturningObject(saved);
 
         assert saved.getDateDelayed() != null;
         tam.setMessage("Tracking " + saved.getTrackNumber() + " has been continued at "
@@ -180,7 +180,7 @@ public class TrackingDAOImpl implements TrackingDAO {
     }
 
     @Override
-    public TrackingAndMessage updateStatusOfTheTracking(Tracking tracking) {
+    public ReturningObjectAndMessage updateStatusOfTheTracking(Tracking tracking) {
         Tracking updatingTrack = repository.findByTrackNumber(tracking.getTrackNumber());
 
         assert tracking.getDriverId() != null;
@@ -239,8 +239,8 @@ public class TrackingDAOImpl implements TrackingDAO {
         }
         Tracking saved = repository.save(updatingTrack);
 
-        TrackingAndMessage tam = new TrackingAndMessage();
-        tam.setTracking(saved);
+        ReturningObjectAndMessage tam = new ReturningObjectAndMessage();
+        tam.setReturningObject(saved);
 
         assert saved.getDateDelayed() != null;
         tam.setMessage("Tracking status for " + saved.getTrackNumber() +" has been updated to " + saved.getStatus());

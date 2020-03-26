@@ -6,7 +6,9 @@ import uz.lc.db.dao.interfaces.TruckDAO;
 import uz.lc.db.entities.Truck;
 import uz.lc.db.repos.TruckRepository;
 import uz.lc.dto.ReturningObjectAndMessage;
+import uz.lc.dto.TruckDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class TruckDAOImpl implements TruckDAO{
@@ -18,8 +20,24 @@ public class TruckDAOImpl implements TruckDAO{
     }
 
     @Override
-    public List<Truck> get() {
+    public List<Truck> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<Truck> getAllDeleted() {
+        return repository.findAllByDeletedTrue();
+    }
+
+    @Override
+    public List<TruckDTO> getAllTrucksWithTrailers() {
+        List<TruckDTO> truckDTOList = new ArrayList<>();
+        return null;
+    }
+
+    @Override
+    public TruckDTO getOneTruckWithTrailer(int id) {
+        return null;
     }
 
     @Override

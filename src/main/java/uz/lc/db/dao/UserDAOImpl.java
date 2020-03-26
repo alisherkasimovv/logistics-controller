@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class UserDAOImpl implements UserDAO {
+
     private UserRepository repository;
 
     @Autowired
@@ -22,13 +23,18 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public List<User> getAll() {
-        return repository.findAll();
+    public List<User> getAllNonDeleted() {
+        return repository.findAllByDeletedFalse();
     }
 
     @Override
-    public List<User> getAllUsersByType() {
-        return repository.findAllByDeletedFalseAndUserType(UserType.AGENT);
+    public List<User> getAllDeleted() {
+        return repository.findAllByDeletedTrue();
+    }
+
+    @Override
+    public List<User> getAllUsersByType(UserType type) {
+        return repository.findAllByDeletedFalseAndUserType(type);
     }
 
     @Override
@@ -49,14 +55,15 @@ public class UserDAOImpl implements UserDAO {
         if (user.getId() != null) {
             User temp = this.getById(user.getId());
 
-            temp.setPassword(user.getPassword());
             temp.setUsername(user.getUsername());
-            temp.setUserType(UserType.AGENT);
+            temp.setPassword(user.getPassword());
+            temp.setFirstName(user.getFirstName());
+            temp.setLastName(user.getLastName());
+            temp.setUserType(user.getUserType());
 
             saved = saveParticularUser(temp);
             roam.setMessage("User has been updated.");
         } else {
-            user.setUserType(UserType.AGENT);
             saved = saveParticularUser(user);
             roam.setMessage("New user has been saved.");
         }

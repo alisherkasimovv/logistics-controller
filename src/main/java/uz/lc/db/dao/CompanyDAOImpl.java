@@ -26,7 +26,12 @@ public class CompanyDAOImpl implements CompanyDAO {
 
     @Override
     public List<Company> getAll() {
-        return repository.findAll();
+        return repository.findAllByDeletedFalse();
+    }
+
+    @Override
+    public List<Company> getAllDeleted() {
+        return repository.findAllByDeletedTrue();
     }
 
     @Override

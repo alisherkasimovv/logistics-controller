@@ -3,7 +3,7 @@ package uz.lc.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.lc.dto.collections.TrackingAndMessage;
+import uz.lc.dto.ReturningObjectAndMessage;
 import uz.lc.db.dao.interfaces.TrackingDAO;
 import uz.lc.db.entities.documents.Tracking;
 
@@ -51,22 +51,22 @@ public class TrackingController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<TrackingAndMessage> createNewTracking(@RequestBody Tracking tracking) {
+    public ResponseEntity<ReturningObjectAndMessage> createNewTracking(@RequestBody Tracking tracking) {
         return new ResponseEntity<>(trackingDAO.saveNewTracking(tracking), HttpStatus.OK);
     }
 
     @PostMapping(value = "/update/status")
-    public ResponseEntity<TrackingAndMessage> updateStatusOfTracking(@RequestBody Tracking tracking) {
+    public ResponseEntity<ReturningObjectAndMessage> updateStatusOfTracking(@RequestBody Tracking tracking) {
         return new ResponseEntity<>(trackingDAO.updateStatusOfTheTracking(tracking), HttpStatus.OK);
     }
 
     @PostMapping(value = "/update/delayed")
-    public ResponseEntity<TrackingAndMessage> updateStatusOfTrackingToDelayed(@RequestBody Tracking tracking) {
+    public ResponseEntity<ReturningObjectAndMessage> updateStatusOfTrackingToDelayed(@RequestBody Tracking tracking) {
         return new ResponseEntity<>(trackingDAO.setTrackingAsDelayed(tracking), HttpStatus.OK);
     }
 
     @PostMapping(value = "/update/continued")
-    public ResponseEntity<TrackingAndMessage> updateStatusOfTrackingToContinued(@RequestBody Tracking tracking) {
+    public ResponseEntity<ReturningObjectAndMessage> updateStatusOfTrackingToContinued(@RequestBody Tracking tracking) {
         return new ResponseEntity<>(trackingDAO.setTrackingAsContinued(tracking), HttpStatus.OK);
     }
 

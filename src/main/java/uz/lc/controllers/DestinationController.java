@@ -26,7 +26,7 @@ public class DestinationController {
     }
 
     @GetMapping(value = "/get/{id}")
-    public ResponseEntity<Destination> getOneDestinations(@PathVariable Integer id) {
+    public ResponseEntity<Destination> getOneDestination(@PathVariable Integer id) {
         return new ResponseEntity<>(destinationDAO.getOneDestination(id), HttpStatus.OK);
     }
 

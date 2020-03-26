@@ -24,7 +24,12 @@ public class TruckController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Truck>> getAllTrucks() {
-        return new ResponseEntity<>(truckDAO.get(), HttpStatus.OK);
+        return new ResponseEntity<>(truckDAO.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get/deleted")
+    public ResponseEntity<List<Truck>> getAllDeletedTrucks() {
+        return new ResponseEntity<>(truckDAO.getAllDeleted(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get/{id}")

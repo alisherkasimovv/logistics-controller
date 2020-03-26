@@ -9,6 +9,7 @@ import java.util.List;
 public interface CompanyDAO {
 
     List<Company> getAll();
+    List<Company> getAllDeleted();
     List<CompanyWithDestinations> getAllCompaniesWithDestinations();
     CompanyWithDestinations getOneCompanyWithDestinations(int id);
     Company getById(int id);
